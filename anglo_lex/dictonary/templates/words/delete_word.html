@@ -1,0 +1,22 @@
+{% extends 'dictionary/home.html' %}
+
+<title>Del</title>
+
+<body>
+
+{% block content %}
+<div class="container">
+    <div class="alert alert-primary text-center mt-5" role="alert">
+        <h2>Are you sure you want to delete <span>{{ dictionary.word }}</span>?</h2>
+        <form method="post">
+        {% csrf_token %}
+            <div class="wrapper__btn__confirm mt-3">
+                <a href="{% url 'home' %}"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button></a>
+                <button type="submit" class="btn btn-primary">Confirm</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+</body>

@@ -1,0 +1,48 @@
+{% extends 'dictionary/home.html' %}
+
+
+<title>{{ title }}</title>
+
+<body>
+
+{% block content %}
+<section class="vh-100 bg-image">
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body p-5">
+              <h2 class="text-uppercase text-center mb-5">Update {{ word }}</h2>
+                <form method="post" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                  {% if field.errors %}
+                    <div class="alert alert-danger mt-2">{{ field.errors|striptags }}</div>
+                    {{ field.label_tag }} {{ field }}
+                  {% else %}
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="{{ f.id_for_label }}">{{ field.label }}</label>
+                      {{ field }}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+                <select class="form-select mb-5" aria-label="Default select example" name="lang">
+                  <option value="en" selected>English</option>
+                  <option value="it">Italian</option>
+                </select>
+                    <div class="form-buttons p-1">
+                        <input type="submit" value="Update" class="btn btn-success"/>
+                        <a href="{%url 'show_dict' wordbook_title=word.dictionary %}" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+</body>

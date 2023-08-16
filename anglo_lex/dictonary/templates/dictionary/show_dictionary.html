@@ -1,0 +1,74 @@
+{% extends 'dictionary/home.html' %}
+{% load static %}
+
+<title>{{ title }}</title>
+
+<body>
+
+{% block nav %}
+    {% include 'dictionary/navbar/nav_word.html' %}
+{% endblock %}
+
+<p><span>Title:</span>{{ dictionary.title }}</p>
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        {% if not search_query %}
+            {% include 'dictionary/links/create_word.html' %}
+        {% endif %}
+        {% for word in page_obj %}
+        <div class="col-lg-3 d-flex justify-content-center">
+            <div class="card mb-5 me-2" style="width: 18rem;">
+                 <div class="wrapper__block__delete p-2 text-end d-flex justify-content-end align-items-center">
+                   <a href="{% url 'update_word' wordbook_title=word.dictionary word_pk=word.pk %}">
+                     <i class="fa fa-pencil" aria-hidden="true"></i>
+                   </a>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center">
+                  <div class="card-body">
+                    <h5 class="card-title fs-4 d-flex justify-content-center">{{ word.word }}</h5>
+                    <p class="card-text fs-5 d-flex justify-content-center">{{ word.translate_word }}</p>
+                  </div>
+                </div>
+                <div class="wrapper__block__delete text-end p-2 d-flex justify-content-end align-items-center">
+                   <a href="{% url 'delete_word' wordbook_title=word.dictionary word_pk=word.pk %}">
+                     <i class="fa fa-trash" aria-hidden="true"></i>
+                   </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if search_query %}
+
+        {% if not page_obj %}
+        <div class="card mb-5 alert alert-primary">
+          <div class="card-body d-flex justify-content-center">
+            <span class="fs-1">Not found result</span>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-center">
+            <a href="{% url 'show_dict' wordbook_title=dictionary.title %}">
+                <button type="button" class="btn btn-dark">Back</button>
+            </a>
+        </div>
+        {% endif %}
+
+
+<!--        <div class="img-fluid d-flex justify-content-center" style="width: 18rem; height: 10rem;">-->
+<!--            <img src="{% static 'icons/add_icon.png' %}" alt="add_icon" width="150">-->
+<!--        </div>-->
+    </div>
+</div>
+
+
+{% include 'dictionary/pagination/page.html' %}
+
+{% endblock %}
+
+
+
+</body>

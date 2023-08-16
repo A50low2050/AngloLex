@@ -1,0 +1,25 @@
+body{
+	background: white;
+}
+
+/*Special style for elements*/
+.card.card__border__grey:hover{
+	transition-duration: 0.1s;
+	border: 2px solid lightgray;
+}
+
+
+.create__wordbook__btn{
+	
+	font-size: 80px;
+	color: black;
+	opacity: 0.4;
+}
+
+.card-body>a:hover{
+	transition-duration: 0.5s;
+	
+	color: black;
+	opacity: 0.7;
+}
+
