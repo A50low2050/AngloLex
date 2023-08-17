@@ -3,7 +3,14 @@ body{
 }
 
 /*Special style for elements*/
-.card.card__border__grey:hover{
+
+.card__border__grey{
+	width: 18rem;
+	height: 250px;
+	max-height: auto;
+}
+
+.card__border__grey:hover{
 	transition-duration: 0.1s;
 	border: 2px solid lightgray;
 }
