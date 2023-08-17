@@ -9,7 +9,7 @@ urlpatterns = [
     path('update/<str:wordbook_title>', UpdateDictionary.as_view(), name='update_dict'),
 
     path('new_word/<str:wordbook_title>', CreateWord.as_view(), name='add_word'),
-    path('delete_word/<str:wordbook_title>/<int:word_pk>', DeleteWord.as_view(), name='delete_word'),
-    path('update_word/<str:wordbook_title>/<int:word_pk>', UpdateWord.as_view(), name='update_word'),
+    path('delete_word/<str:wordbook_title>/<str:word_pk>', DeleteWord.as_view(), name='delete_word'),
+    path('update_word/<str:wordbook_title>/<str:word_pk>', UpdateWord.as_view(), name='update_word'),
 
 ]

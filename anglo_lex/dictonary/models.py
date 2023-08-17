@@ -1,9 +1,10 @@
 from django.db import models
 from django.urls import reverse
-from django.template.defaultfilters import slugify
+import uuid
 
 
 class Dictionary(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=20, db_index=True, unique=True)
     description = models.TextField(blank=True)
     time_create = models.DateTimeField(auto_now_add=True)
@@ -19,6 +20,7 @@ class Dictionary(models.Model):
 
 
 class Word(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     word = models.CharField(max_length=40, db_index=True)
     translate_word = models.CharField(max_length=40, db_index=True, blank=True)
     time_create = models.DateTimeField(auto_now_add=True)
