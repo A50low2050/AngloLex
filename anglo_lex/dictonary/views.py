@@ -8,7 +8,7 @@ from django.views.generic.list import MultipleObjectMixin
 
 
 from .models import *
-from .forms import CreateDictionaryForm, UpdateDictionaryForm, CreateWordForm, UpdateWordForm
+from .forms import DictionaryForm, WordForm, WordForm
 from .mixins import *
 from .utils import translator_word
 
@@ -37,7 +37,7 @@ class HomePage(ListView):
 
 # Dictionary Views
 class CreateDictionary(CreateView):
-    form_class = CreateDictionaryForm
+    form_class = DictionaryForm
     model = Dictionary
     template_name = 'dictionary/add_dictonary.html'
     success_url = reverse_lazy('home')
@@ -98,7 +98,7 @@ class DeleteDictionary(GetObjectMixin, DeleteView):
 
 
 class UpdateDictionary(GetObjectMixin, UpdateView):
-    form_class = UpdateDictionaryForm
+    form_class = DictionaryForm
     model = Dictionary
     template_name = 'dictionary/update_dictionary.html'
     success_url = reverse_lazy('home')
@@ -116,7 +116,7 @@ class UpdateDictionary(GetObjectMixin, UpdateView):
 
 # WordViews
 class CreateWord(GetObjectMixin, CreateView, DetailView):
-    form_class = CreateWordForm
+    form_class = WordForm
     model = Dictionary
     template_name = 'words/add_word.html'
 
@@ -165,7 +165,7 @@ class DeleteWord(DeleteView):
 
 
 class UpdateWord(UpdateView):
-    form_class = UpdateWordForm
+    form_class = WordForm
     model = Word
     pk_url_kwarg = 'word_pk'
     template_name = 'words/update_word.html'
