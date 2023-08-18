@@ -1,14 +1,13 @@
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import View, ListView, CreateView, DetailView, DeleteView, UpdateView
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, CreateView, DetailView, DeleteView, UpdateView
+from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.views.generic.list import MultipleObjectMixin
 
-
 from .models import *
-from .forms import DictionaryForm, WordForm, WordForm
+from .forms import DictionaryForm, WordForm
 from .mixins import *
 from .utils import translator_word
 
@@ -191,7 +190,4 @@ class UpdateWord(UpdateView):
         get_word.update(word=create_word, translate_word=translate_word, dictionary=dictionary)
 
         return HttpResponseRedirect(f'/wordbook/{wordbook_title}')
-
-
-
 
