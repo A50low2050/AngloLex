@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, DeleteView, UpdateView
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.db.models import Q
 from django.views.generic.list import MultipleObjectMixin
 
@@ -31,7 +31,16 @@ class HomePage(ListView):
             context['dictionaries'] = Dictionary.objects.filter(
                 Q(title__icontains=search_query) | Q(description__icontains=search_query))
 
+        #     context['dictionaries'] = Dictionary.objects.all().order_by('title')
+        #     # print(dictionaries)
         return context
+
+    def get_ordering(self):
+        ordering_title = self.request.GET.get('ordering_title', '')
+        if ordering_title:
+            ordering = self.request.GET.get('title', 'title')
+            return ordering
+        return None
 
 
 # Dictionary Views
@@ -191,3 +200,8 @@ class UpdateWord(UpdateView):
 
         return HttpResponseRedirect(f'/wordbook/{wordbook_title}')
 
+
+# def ordering_title_dictionary(request):
+#     dictionaries = Dictionary.objects.all().order_by('title')
+#     print(dictionaries)
+#     return render(request, 'dictionary/home.html', {'dictionaries': dictionaries})
