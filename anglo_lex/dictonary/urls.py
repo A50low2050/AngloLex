@@ -1,8 +1,9 @@
 from django.urls import path
+from django.contrib.auth.decorators import login_required
 from dictonary.views import *
 
 urlpatterns = [
-    path('', HomePage.as_view(), name='home'),
+    path('', login_required(HomePage.as_view()), name='home'),
     path('add_dictionary/', CreateDictionary.as_view(), name='add_dict'),
     path('wordbook/<str:wordbook_title>', ShowDictionary.as_view(), name='show_dict'),
     path('delete/<str:wordbook_title>', DeleteDictionary.as_view(), name='delete_dict'),

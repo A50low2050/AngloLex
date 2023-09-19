@@ -1,21 +1,39 @@
-from rest_framework import serializers
 from dictonary.models import Dictionary
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
+from account.models import Users
 
 
 class DictionarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Dictionary
         fields = '__all__'
-    # title = serializers.CharField(max_length=20)
-    # description = serializers.CharField(allow_blank=True)
-    # time_create = serializers.DateTimeField(read_only=True)
-    #
-    # def create(self, validated_data):
-    #     return Dictionary.objects.create(**validated_data)
-    #
-    # def update(self, instance, validated_data):
-    #     instance.title = validated_data.get("title", instance.title)
-    #     instance.description = validated_data.get("description", instance.description)
-    #     instance.create = validated_data.get("time_create", instance.time_create)
-    #     instance.save()
-    #     return instance
+
+
+class SignUpSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=80)
+    username = serializers.CharField(max_length=45)
+    password = serializers.CharField(min_length=1, write_only=True)
+
+    class Meta:
+        model = Users
+        fields = ['email', 'username', 'password']
+
+    def validate(self, attrs):
+        email_exists = Users.objects.filter(email=attrs["email"]).exists()
+
+        if email_exists:
+            raise ValidationError("Email has already been used")
+
+        return super().validate(attrs)
+
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+
+        user = super().create(validated_data)
+        user.set_password(password)
+
+        user.save()
+
+        return user
