@@ -33,7 +33,7 @@
                 </select>
                     <div class="form-buttons p-1">
                         <input type="submit" value="Update" class="btn btn-success"/>
-                        <a href="{%url 'show_dict' wordbook_title=word.dictionary %}" class="btn btn-outline">Cancel</a>
+                        <a href="{%url 'show_dict' wordbook_title=word.dictionary pk=word.pk %}" class="btn btn-outline">Cancel</a>
                     </div>
                 </form>
             </div>

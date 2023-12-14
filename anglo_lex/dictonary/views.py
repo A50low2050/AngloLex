@@ -2,13 +2,13 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, DeleteView, UpdateView
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.views.generic.list import MultipleObjectMixin
 
-from .models import *
+from .models import Dictionary, Word
 from .forms import DictionaryForm, WordForm
-from .mixins import *
+from .mixins import GetObjectMixin
 from .utils import translator_word
 
 
@@ -31,8 +31,6 @@ class HomePage(ListView):
             context['dictionaries'] = Dictionary.objects.filter(
                 Q(title__icontains=search_query) | Q(description__icontains=search_query))
 
-        #     context['dictionaries'] = Dictionary.objects.all().order_by('title')
-        #     # print(dictionaries)
         return context
 
     def get_ordering(self):
@@ -43,7 +41,6 @@ class HomePage(ListView):
         return None
 
 
-# Dictionary Views
 class CreateDictionary(CreateView):
     form_class = DictionaryForm
     model = Dictionary
@@ -54,6 +51,7 @@ class CreateDictionary(CreateView):
 
 class ShowDictionary(GetObjectMixin, DetailView, MultipleObjectMixin):
     model = Dictionary
+    pk_url_kwarg = 'pk'
     template_name = 'dictionary/show_dictionary.html'
     context_object_name = 'dictionary'
 
@@ -91,6 +89,7 @@ class ShowDictionary(GetObjectMixin, DetailView, MultipleObjectMixin):
 class DeleteDictionary(GetObjectMixin, DeleteView):
     model = Dictionary
     template_name = 'dictionary/confirm_delete.html'
+    pk_url_kwarg = 'pk'
     context_object_name = 'wordbook_title'
     success_url = reverse_lazy('home')
 
@@ -108,6 +107,7 @@ class DeleteDictionary(GetObjectMixin, DeleteView):
 class UpdateDictionary(GetObjectMixin, UpdateView):
     form_class = DictionaryForm
     model = Dictionary
+    pk_url_kwarg = 'pk'
     template_name = 'dictionary/update_dictionary.html'
     success_url = reverse_lazy('home')
 
@@ -122,7 +122,6 @@ class UpdateDictionary(GetObjectMixin, UpdateView):
         return context
 
 
-# WordViews
 class CreateWord(GetObjectMixin, CreateView, DetailView):
     form_class = WordForm
     model = Dictionary
@@ -142,7 +141,7 @@ class CreateWord(GetObjectMixin, CreateView, DetailView):
             dictionary=dictionary
         )
 
-        return HttpResponseRedirect(f'/wordbook/{wordbook_title}')
+        return HttpResponseRedirect(f'/wordbook/{wordbook_title}/{dictionary.pk}')
 
 
 class DeleteWord(DeleteView):
@@ -198,10 +197,4 @@ class UpdateWord(UpdateView):
         get_word = Word.objects.filter(id=word_pk)
         get_word.update(word=create_word, translate_word=translate_word, dictionary=dictionary)
 
-        return HttpResponseRedirect(f'/wordbook/{wordbook_title}')
-
-
-# def ordering_title_dictionary(request):
-#     dictionaries = Dictionary.objects.all().order_by('title')
-#     print(dictionaries)
-#     return render(request, 'dictionary/home.html', {'dictionaries': dictionaries})
+        return HttpResponseRedirect(f'/wordbook/{wordbook_title}/{dictionary.pk}')

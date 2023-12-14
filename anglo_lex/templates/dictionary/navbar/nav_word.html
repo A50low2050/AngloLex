@@ -14,7 +14,7 @@
         </li>
       </ul>
       <ul class="navbar-nav mx-auto fs-5 my-2">
-       <form action="{% url 'show_dict' wordbook_title=dictionary.title %}" class="d-flex my-2" method="get">
+       <form action="{% url 'show_dict' wordbook_title=dictionary.title pk=dictionary.pk %}" class="d-flex my-2" method="get">
           <input class="form-control me-2" type="search" name="search_word" placeholder="Search Word" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">
             <i class="fa fa-search" aria-hidden="true"></i>

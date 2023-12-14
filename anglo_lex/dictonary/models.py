@@ -13,7 +13,7 @@ class Dictionary(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('show_dict', kwargs={'wordbook_title': self.title})
+        return reverse('show_dict', kwargs={'wordbook_title': self.title, 'pk': self.id})
 
     class Meta:
         ordering = ['-time_create']
