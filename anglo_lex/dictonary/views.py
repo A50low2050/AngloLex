@@ -13,11 +13,14 @@ from .utils import translator_word
 
 
 class HomePage(ListView):
-    model = Dictionary
+    # model = Dictionary
     paginate_by = 3
     template_name = 'dictionary/home.html'
     context_object_name = 'dictionaries'
     extra_context = {'title': 'Home'}
+
+    def get_queryset(self):
+        return Dictionary.objects.filter(user=self.request.user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -47,6 +50,12 @@ class CreateDictionary(CreateView):
     template_name = 'dictionary/add_dictonary.html'
     success_url = reverse_lazy('home')
     extra_context = {'title': 'Create Dictionary'}
+
+    def form_valid(self, form):
+        dictionary = form.save(commit=False)
+        dictionary.user = self.request.user
+        dictionary.save()
+        return super(CreateDictionary, self).form_valid(form)
 
 
 class ShowDictionary(GetObjectMixin, DetailView, MultipleObjectMixin):

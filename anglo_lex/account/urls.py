@@ -8,7 +8,7 @@ urlpatterns = [
     path('signup/', SignUp.as_view(), name='sign_up'),
 
     path('login/', UserLogin.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('sign_up')), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('login')), name='logout'),
 
     re_path('social-auth/', include('drf_social_oauth2.urls', namespace='drf')),
     path('social-auth/', include('social_django.urls', namespace='social-auth')),

@@ -14,7 +14,7 @@ from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from oauth2_provider.settings import oauth2_settings
+# from oauth2_provider.settings import oauth2_settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,12 +43,18 @@ INSTALLED_APPS = [
     'dictonary.apps.DictonaryConfig',
     'api.apps.ApiConfig',
     'account.apps.AccountConfig',
-
+    'crispy_forms',
+    'crispy_bootstrap5',
     'rest_framework',
     'oauth2_provider',
     'social_django',
     'drf_social_oauth2',
+
 ]
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,7 +72,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, "templates")],
-        'APP_DIRS': False,
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -133,7 +139,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-AUTH_USER_MODEL = 'account.Users'
+AUTH_USER_MODEL = 'account.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIMPLE_JWT = {

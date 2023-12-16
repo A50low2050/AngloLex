@@ -1,11 +1,18 @@
 from django.db import models
 from django.urls import reverse
 import uuid
+from account.models import User
 
 
 class Dictionary(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=20, db_index=True, unique=True)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='user',
+        related_name='user_dictionary'
+    )
+    title = models.CharField(max_length=20, db_index=True, unique=False)
     description = models.TextField(blank=True)
     time_create = models.DateTimeField(auto_now_add=True)
 
@@ -16,6 +23,7 @@ class Dictionary(models.Model):
         return reverse('show_dict', kwargs={'wordbook_title': self.title, 'pk': self.id})
 
     class Meta:
+        db_table = 'dictionary'
         ordering = ['-time_create']
 
 
@@ -30,4 +38,5 @@ class Word(models.Model):
         return self.word
 
     class Meta:
+        db_table = 'word'
         ordering = ['-time_create']
