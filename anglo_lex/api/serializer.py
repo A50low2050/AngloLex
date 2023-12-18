@@ -2,7 +2,7 @@ from dictonary.models import Dictionary
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from account.models import Users
+from account.models import User
 
 
 class DictionarySerializer(serializers.ModelSerializer):
@@ -17,11 +17,11 @@ class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=1, write_only=True)
 
     class Meta:
-        model = Users
+        model = User
         fields = ['email', 'username', 'password']
 
     def validate(self, attrs):
-        email_exists = Users.objects.filter(email=attrs["email"]).exists()
+        email_exists = User.objects.filter(email=attrs["email"]).exists()
 
         if email_exists:
             raise ValidationError("Email has already been used")

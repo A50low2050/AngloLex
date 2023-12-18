@@ -7,7 +7,7 @@ from .utils import translator_word
 
 class WordBookAdmin(admin.ModelAdmin):
     model = Dictionary
-    list_display = ['title', 'description', 'time_create']
+    list_display = ['title', 'description', 'time_create', 'user']
     ordering = ('title', 'time_create',)
     list_display_links = ['title']
     search_fields = ('title', 'description',)
@@ -15,7 +15,7 @@ class WordBookAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'description',)
+            'fields': ('title', 'user', 'description',)
         }),
         ('Time', {
             'fields': ('time_create',),

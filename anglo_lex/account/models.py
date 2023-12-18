@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Users(AbstractUser):
+class User(AbstractUser):
     email = models.EmailField(max_length=80, unique=True)
     username = models.CharField(max_length=40)
 
@@ -11,3 +11,6 @@ class Users(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    class Meta:
+        db_table = 'user'

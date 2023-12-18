@@ -13,16 +13,27 @@ from .utils import translator_word
 
 
 class HomePage(ListView):
-    model = Dictionary
     paginate_by = 3
     template_name = 'dictionary/home.html'
     context_object_name = 'dictionaries'
     extra_context = {'title': 'Home'}
 
+    def get_queryset(self):
+        sort_dictionary = self.request.GET.get('sort_dictionary', '')
+
+        if sort_dictionary == 'alphabetically':
+            self.request.session['sort'] = 'title'
+        if sort_dictionary == 'recent_saving':
+            self.request.session['sort'] = '-time_create'
+
+        get_sort = self.request.session.get('sort', None)
+        if get_sort is None:
+            return Dictionary.objects.filter(user=self.request.user)
+        return Dictionary.objects.filter(user=self.request.user).order_by(get_sort)
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Search current WordBook
         search_query = self.request.GET.get('search_dict', '')
 
         context['search_query'] = search_query
@@ -33,13 +44,6 @@ class HomePage(ListView):
 
         return context
 
-    def get_ordering(self):
-        ordering_title = self.request.GET.get('ordering_title', '')
-        if ordering_title:
-            ordering = self.request.GET.get('title', 'title')
-            return ordering
-        return None
-
 
 class CreateDictionary(CreateView):
     form_class = DictionaryForm
@@ -47,6 +51,12 @@ class CreateDictionary(CreateView):
     template_name = 'dictionary/add_dictonary.html'
     success_url = reverse_lazy('home')
     extra_context = {'title': 'Create Dictionary'}
+
+    def form_valid(self, form):
+        dictionary = form.save(commit=False)
+        dictionary.user = self.request.user
+        dictionary.save()
+        return super(CreateDictionary, self).form_valid(form)
 
 
 class ShowDictionary(GetObjectMixin, DetailView, MultipleObjectMixin):
@@ -73,7 +83,6 @@ class ShowDictionary(GetObjectMixin, DetailView, MultipleObjectMixin):
         context['paginator'] = paginator
         context['page_obj'] = paginator.get_page(page_number)
 
-        # Search current Word
         search_query = self.request.GET.get('search_word', '')
         context['search_query'] = search_query
 

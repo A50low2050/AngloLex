@@ -6,13 +6,13 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.views import LoginView
 
-from .models import Users
+from .models import User
 from .forms import UserRegisterForm, UserLoginForm
 from .tokens import create_jwt_pair_for_user
 
 
 class SignUp(CreateView):
-    model = Users
+    model = User
     template_name = 'account/sign_up.html'
     form_class = UserRegisterForm
 

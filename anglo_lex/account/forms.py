@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
-from .models import Users
+from .models import User
 
 
 class UserRegisterForm(UserCreationForm):
@@ -12,7 +12,7 @@ class UserRegisterForm(UserCreationForm):
                                 widget=forms.PasswordInput(attrs={'class': 'form-control mb-4'}))
 
     class Meta:
-        model = Users
+        model = User
         fields = ['username', 'email', 'password1', 'password2']
 
 
@@ -27,5 +27,5 @@ class UserLoginForm(AuthenticationForm):
                                widget=forms.PasswordInput(attrs={'class': 'form-control mb-4'}))
 
     class Meta:
-        model = Users
+        model = User
 
