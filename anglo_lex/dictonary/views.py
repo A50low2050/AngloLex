@@ -27,6 +27,8 @@ class HomePage(ListView):
             self.request.session['sort'] = '-time_create'
 
         get_sort = self.request.session.get('sort', None)
+        if get_sort is None:
+            return Dictionary.objects.filter(user=self.request.user)
         return Dictionary.objects.filter(user=self.request.user).order_by(get_sort)
 
     def get_context_data(self, *, object_list=None, **kwargs):
