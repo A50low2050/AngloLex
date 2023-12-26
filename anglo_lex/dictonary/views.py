@@ -11,6 +11,8 @@ from .forms import DictionaryForm, WordForm
 from .mixins import GetObjectMixin
 from .utils import translator_word
 
+from django.core.cache import cache
+
 
 class HomePage(ListView):
     paginate_by = 3
@@ -27,8 +29,16 @@ class HomePage(ListView):
             self.request.session['sort'] = '-time_create'
 
         get_sort = self.request.session.get('sort', None)
-        if get_sort is None:
-            return Dictionary.objects.filter(user=self.request.user)
+        cache_dictionary = cache.get('dictionary')
+
+        if cache_dictionary is None:
+            print('create new cache')
+            dictionary = Dictionary.objects.filter(user=self.request.user)
+            cache.set('dictionary', dictionary, timeout=30)
+        else:
+            print('cache')
+            return cache_dictionary
+
         return Dictionary.objects.filter(user=self.request.user).order_by(get_sort)
 
     def get_context_data(self, *, object_list=None, **kwargs):
