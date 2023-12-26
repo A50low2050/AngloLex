@@ -16,6 +16,8 @@ btn[2].onclick = function() {
 
 if (storedValue == null) {
     localStorage.setItem('sort', 'recent_saving')
+    btn[2].classList.add('active');
+    elem[1].classList.add('active');
 } else if (storedValue == 'alphabetically'){
     btn[0].classList.add('active');
     elem[0].classList.add('active');
