@@ -31,6 +31,9 @@ class HomePage(ListView):
         get_sort = self.request.session.get('sort', None)
         cache_dictionary = cache.get('dictionary')
 
+        if get_sort is None:
+            return Dictionary.objects.filter(user=self.request.user)
+
         if cache_dictionary is None:
             print('create new cache')
             dictionary = Dictionary.objects.filter(user=self.request.user)
