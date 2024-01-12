@@ -31,18 +31,19 @@ class HomePage(ListView):
         get_sort = self.request.session.get('sort', None)
         cache_dictionary = cache.get('dictionary')
 
-        if get_sort is None:
-            return Dictionary.objects.filter(user=self.request.user)
+        if get_sort:
+            return Dictionary.objects.filter(user=self.request.user).order_by(get_sort)
 
         if cache_dictionary is None:
             print('create new cache')
             dictionary = Dictionary.objects.filter(user=self.request.user)
             cache.set('dictionary', dictionary, timeout=30)
+
         else:
             print('cache')
             return cache_dictionary
 
-        return Dictionary.objects.filter(user=self.request.user).order_by(get_sort)
+        return Dictionary.objects.filter(user=self.request.user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

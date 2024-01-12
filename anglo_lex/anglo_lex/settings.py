@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'dictonary.apps.DictonaryConfig',
     'api.apps.ApiConfig',
     'account.apps.AccountConfig',
+    'user_profile.apps.UserProfileConfig',
     'crispy_forms',
     'crispy_bootstrap5',
     'rest_framework',

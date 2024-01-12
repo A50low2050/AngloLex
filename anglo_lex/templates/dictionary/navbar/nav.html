@@ -21,6 +21,32 @@
           </button>
         </form>
       </ul>
+
+      <ul class="navbar-nav mx-2 my-2">
+        <div class="dropdown profile__user">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ user.username }}
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li>
+            <div class="nav-link">
+              <a class="nav-link profile__link" href="{% url 'edit_profile' username=user.username %}">
+                 <i class="fa fa-user" aria-hidden="true">Profile</i>
+              </a>
+            </div>
+          </li>
+          <li>
+            <div class="nav-link">
+              <a class="nav-link profile__link" href="{% url 'logout_user' %}">
+                 <i class="fa fa-sign-out" aria-hidden="true">Exit</i>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+      </ul>
+
       <ul class="navbar-nav mx-right my-2">
        <div class="wrapper_btn">
         <a href="{% url 'add_dict' %}">
