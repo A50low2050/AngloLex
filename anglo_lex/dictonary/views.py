@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, DeleteView, UpdateView
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.db.models import Q
 from django.views.generic.list import MultipleObjectMixin
 
@@ -12,6 +12,10 @@ from .mixins import GetObjectMixin
 from .utils import translator_word
 
 from django.core.cache import cache
+
+
+def index_test(request):
+    return render(request, 'index.html')
 
 
 class HomePage(ListView):
