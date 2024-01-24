@@ -6,80 +6,120 @@ import {
     Form } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {useForm} from 'react-hook-form';
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useState } from 'react';
-import axios from 'axios';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://127.0.0.1:8000"
-});
+const Register = () => {
 
-function App() {
-   /*const [currentUser, setCurrentUser] = useState();*/
-   const [username, setUsername] = useState('');
-   const [email, setEmail] = useState('');
-   const [password, setPassword] = useState('');
+  const [passwordEye, setPasswordEye] = useState(false)
 
-   /*const [dict, setDict] = useState([])*/
 
-   /*useEffect(() => {
-        axios({
-            'method': 'GET',
-            'url': 'http://127.0.0.1:8000/api/v1/dictionary/'
-        }).then(response => {
-            setDict(response.data)
-        })
-   },[])*/
+  const handlePasswordClick = () => {
+    setPasswordEye(!passwordEye)
+  }
 
-   function submitRegistration(e) {
-    e.preventDefault();
-    console.log(email);
-    client.post(
-      "/api/v1/account/signup/",
-      {
-        email: email,
-        username: username,
-        password: password
-      }
-    )
-    }
+  const {
+    register,
+    watch,
+    reset,
+    formState: { errors, isValid },
+    handleSubmit,
+  } = useForm({
+    mode: 'onBlur'
+  })
 
-  return (
-    <section className='vh-100 bg-image'>
+  const password = watch('password')
+
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data))
+    reset()
+  }
+
+    return(
+    <section className='vh-100'>
     <div className='mask d-flex align-items-center h-100 gradient-custom-3'>
     <Container className='h-100'>
       <Row className='d-flex justify-content-center align-items-center h-100'>
-        <div className="col-12 col-md-9 col-lg-7 col-xl-6">
+        <div className="col-12 col-md-9 col-lg-7 col-xl-5">
           <Card className='card border-0'>
             <Card className='card-body p-5 border-0'>
             <h2 className="text-uppercase text-center mb-5">Create an account</h2>
-              <Form onSubmit={e => submitRegistration(e)}>
+              <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className="form-outline mb-4" controlId="formName">
-                <Form.Label>Your name</Form.Label>
-                <Form.Control type="text" name='username' value={username} onChange={(e) => setUsername(e.target.value)}/>
+                <Form.Label>Your username</Form.Label>
+                <Form.Control type="text" name='username' {...register('username', {
+                  required: 'Username is required',
+                  minLength: {
+                    value: 5,
+                    message: 'The min field length is 5'
+                  },
+                  maxLength: {
+                    value: 15,
+                    message: 'The max field length is 15'
+                  },
+
+                })}/>
+                <div style={{ color:'red' }}>{ errors?.username && <p>{ errors?.username?.message || 'Error!'}</p> }</div>
               </Form.Group>
+
 
               <Form.Group className="form-outline mb-4" controlId="formEmail">
                 <Form.Label>Your Email</Form.Label>
-                <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                <Form.Control type="email" {...register('email', {
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    message: 'Invalid email address'
+                  }
+                })} />
+                <div style={{ color:'red' }}>{ errors?.email && <p>{ errors?.email?.message || 'Error!'}</p> }</div>
               </Form.Group>
 
               <Form.Group className="form-outline mb-4" controlId="formPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <div className='d-flex justify-content-end'>
+                  <Form.Control className='form-control' type={(passwordEye === false)? 'password': 'text'} {...register('password', {
+                    required: 'Password is required',
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                      message: 'Password must at least one upper case letter, one lower case letter,one number, and one special character and length is at least 8 characters'
+                    }
+                  })}/>
+
+                  <span className='position-absolute pt-1 pe-3'>
+                    {
+                      (passwordEye === false)?<FaEyeSlash onClick={handlePasswordClick}/>:
+                      <FaEye onClick={handlePasswordClick}/>
+                    }
+                  </span>
+                </div>
+                <div style={{ color:'red' }}>{ errors?.password && <p>{ errors?.password?.message || 'Error!'}</p> }</div>
               </Form.Group>
 
-              <Form.Group className="form-outline mb-4" controlId="formRepeatPassword">
-                <Form.Label>Repeat your password</Form.Label>
-                <Form.Control type="password"/>
+
+              <Form.Group className="form-outline mb-4" controlId="formConfirmPassword">
+                <Form.Label>Confirm your password</Form.Label>
+                <div className='d-flex justify-content-end'>
+                  <Form.Control type={(passwordEye === false)? 'password': 'text'} {...register('confirm_password', {
+                    required: 'Confirm password is required',
+                    validate: (value) => value === password || 'The passwords do not match'
+
+                  })}/>
+                  <span className='position-absolute pt-1 pe-3'>
+                      {
+                        (passwordEye === false)?<FaEyeSlash onClick={handlePasswordClick}/>:
+                        <FaEye onClick={handlePasswordClick}/>
+                      }
+                    </span>
+                  </div>
+                <div style={{ color:'red' }}>{ errors?.confirm_password && <p>{ errors?.confirm_password?.message || 'Error!'}</p> }</div>
               </Form.Group>
 
               <div className='d-flex justify-content-center'>
-                <Button className='btn btn-success btn-block btn-lg gradient-custom-4 text-body border-0' type="submit">
-                  Register
+                <Button className='btn btn-success btn-block btn-lg gradient-custom-4 text-body border-0' type="submit" disabled={!isValid}>
+                  Sign Up
                 </Button>
               </div>
 
@@ -94,8 +134,7 @@ function App() {
     </Container>
     </div>
     </section>
-
-  );
+    );
 }
 
-export default App;
+export default Register;
