@@ -8,13 +8,13 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useForm} from 'react-hook-form';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { useState } from 'react';
+import { useState} from 'react';
+import axios from 'axios'
 
 
 const Register = () => {
 
   const [passwordEye, setPasswordEye] = useState(false)
-
 
   const handlePasswordClick = () => {
     setPasswordEye(!passwordEye)
@@ -33,7 +33,20 @@ const Register = () => {
   const password = watch('password')
 
   const onSubmit = (data) => {
-    alert(JSON.stringify(data))
+    const username = data['username']
+    const email = data['email']
+    const password = data['password']
+
+    try {
+      const response = axios.post('http://127.0.0.1:8000/api/v1/account/signup/', {
+           username,
+           email,
+           password
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Registration failed', error);
+    }
     reset()
   }
 
