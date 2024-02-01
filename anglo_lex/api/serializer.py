@@ -37,3 +37,12 @@ class SignUpSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+class SignInSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=80)
+    password = serializers.CharField(min_length=1, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'password']

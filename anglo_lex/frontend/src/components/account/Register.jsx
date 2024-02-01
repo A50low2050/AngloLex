@@ -11,7 +11,6 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useState} from 'react';
 import axios from 'axios'
 
-
 const Register = () => {
 
   const [passwordEye, setPasswordEye] = useState(false)
@@ -43,7 +42,6 @@ const Register = () => {
            email,
            password
       });
-      console.log(response.data);
     } catch (error) {
       console.error('Registration failed', error);
     }
